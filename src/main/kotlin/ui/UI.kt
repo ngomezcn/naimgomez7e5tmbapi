@@ -2,6 +2,8 @@ package ui
 
 import BLRoutePlanner
 import com.example.example.OSMPlace
+import repositories.ClientFactory
+import repositories.OSMRepository
 
 // https://api.tmb.cat/v1/planner/plan?app_key=95aa927e0682dc28a7cd3c306f6cc5e8&app_id=25555beb&fromPlace=41.3755204,2.1498870&toPlace=41.422520,2.187824&mode=TRANSIT,WALK
 
@@ -9,41 +11,90 @@ class UI {
 
     private val blRoutePlanner = BLRoutePlanner()
 
+    private val client = ClientFactory()
+    private val osmRepository = OSMRepository(client.httpClient)
+
     suspend fun start() {
-        askDepartureName()
-        askDestinationName()
 
+        val selectedDeparturePlace : OSMPlace = askDeparturePlace()
+        printAddressOfPlace(selectedDeparturePlace)
+        blRoutePlanner.departurePlace = selectedDeparturePlace
 
+        val selectedDestinationPlace : OSMPlace = askDestinationPlace()
+        blRoutePlanner.departurePlace = selectedDestinationPlace
+        printAddressOfPlace(selectedDestinationPlace)
     }
 
-    private suspend fun askDepartureName() {
-        val depName = "institut tecnologic de barcelona";
+    private suspend fun askDestinationPlace(): OSMPlace {
+        var place = OSMPlace()
 
-        val foundPlaces = blRoutePlanner.findPlaces(depName)
+        println("Indique direccion de llegada")
+        var departureName = "seidor"; // ASK USER
 
-        if(foundPlaces.size == 1) {
-            blRoutePlanner.departurePlace = foundPlaces[0]
-            printAddressOfPlace(foundPlaces[0])
+        var findedPlaces : List<OSMPlace> = osmRepository.getPlacesByName(departureName)
 
-        } else if (foundPlaces.size > 1) {
-            blRoutePlanner.departurePlace = foundPlaces[0]
-            println("Cual de las siguietnes direcciones ")
-
-        } else {
-            println("No se ha encontrado ningun lugar con el nombre $depName")
+        while (findedPlaces.isEmpty()) {
+            println("No se ha encontrado ningun lugar con el nombre $departureName, vuelva a indicar la direccion")
+            departureName = "institut tecnologic de barcelona";
+            findedPlaces = osmRepository.getPlacesByName(departureName)
         }
 
+        if (findedPlaces.size > 1) {
+            println("Cual de las siguientes direcciones es la indicada?")
+
+            for (i in findedPlaces) {
+                printAddressOfPlace(i)
+            }
+
+            val selectedPlace = 0 // ASK USER
+            place = findedPlaces[selectedPlace]
+
+        } else {
+            place = findedPlaces[0]
+        }
+
+        return place
+    }
+
+    private suspend fun askDeparturePlace() : OSMPlace {
+
+        var place = OSMPlace()
+
+        println("Indique direccion de salida")
+        var departureName = "institut tecnologic de barcelona"; // ASK USER
+
+        var findedPlaces : List<OSMPlace> = osmRepository.getPlacesByName(departureName)
+
+        while (findedPlaces.isEmpty()) {
+            println("No se ha encontrado ningun lugar con el nombre $departureName, vuelva a indicar la direccion")
+            departureName = "institut tecnologic de barcelona";
+            findedPlaces = osmRepository.getPlacesByName(departureName)
+        }
+
+        if (findedPlaces.size > 1) {
+            println("Cual de las siguientes direcciones es la indicada?")
+
+            val selectedPlace = 0 // ASK USER
+            place = findedPlaces[selectedPlace]
+        } else {
+            place = findedPlaces[0]
+        }
+
+        return place
     }
 
     private fun printAddressOfPlace(place: OSMPlace) {
         println("${place.address?.city}, " +
-                "${place.address?.county}  " +
-                "${place.address?.state}  " +
-                "${place.address?.postcode}  " +
-                "${place.address?.amenity}  " +
-                "${place.address?.country}  " +
-                "${place.address?.countryCode}  " +
-                "${place.address?.postcode}")
+                "${place.address?.county},  " +
+                "${place.address?.state},  " +
+                "${place.address?.postcode},  " +
+                "${place.address?.amenity},  " +
+                "${place.address?.country},  " +
+                "${place.address?.countryCode},  " +
+                "${place.address?.postcode},")
+
+
+
     }
 
 
@@ -56,8 +107,3 @@ class UI {
     }
 }
 
-suspend fun main()
-{
-    val ui = UI()
-    ui.start()
-}
