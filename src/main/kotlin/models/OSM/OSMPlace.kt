@@ -1,8 +1,7 @@
-package com.example.example
+package models.OSM
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import models.OSMAddress
 
 @Serializable
 data class OSMPlace (

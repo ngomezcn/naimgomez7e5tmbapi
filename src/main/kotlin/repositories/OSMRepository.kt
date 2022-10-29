@@ -1,11 +1,11 @@
 package repositories
 
-import com.example.example.OSMPlace
+import models.OSM.OSMPlace
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 
-class OSMRepository(val httpClient: HttpClient) {
+class OSMRepository(private val httpClient: HttpClient) {
 
     public suspend fun getPlacesByName(address: String): List<OSMPlace>{
 

@@ -1,7 +1,7 @@
 package ui
 
 import BLRoutePlanner
-import com.example.example.OSMPlace
+import models.OSM.OSMPlace
 import repositories.ClientFactory
 import repositories.OSMRepository
 
@@ -16,13 +16,15 @@ class UI {
 
     suspend fun start() {
 
-        val selectedDeparturePlace : OSMPlace = askDeparturePlace()
-        printAddressOfPlace(selectedDeparturePlace)
-        blRoutePlanner.departurePlace = selectedDeparturePlace
+        val departurePlace : OSMPlace = askDeparturePlace()
+        printAddressOfPlace(departurePlace)
+        blRoutePlanner.departurePlace = departurePlace
 
-        val selectedDestinationPlace : OSMPlace = askDestinationPlace()
-        blRoutePlanner.departurePlace = selectedDestinationPlace
-        printAddressOfPlace(selectedDestinationPlace)
+        val destinationPlace : OSMPlace = askDestinationPlace()
+        blRoutePlanner.departurePlace = destinationPlace
+        printAddressOfPlace(destinationPlace)
+
+
     }
 
     private suspend fun askDestinationPlace(): OSMPlace {
@@ -87,22 +89,14 @@ class UI {
         println("${place.address?.city}, " +
                 "${place.address?.county},  " +
                 "${place.address?.state},  " +
+                "${place.address?.stateDistrict},  " +
+                "${place.address?.neighbourhood},  " +
+                "${place.address?.road},  " +
                 "${place.address?.postcode},  " +
                 "${place.address?.amenity},  " +
                 "${place.address?.country},  " +
                 "${place.address?.countryCode},  " +
-                "${place.address?.postcode},")
-
-
-
-    }
-
-
-    private fun askDestinationName() {
-        //BLRoutePlanner.destinationName = "seidor carrer pujades"
-    }
-
-    private fun askSpecificAddress() {
+                "${place.address?.postcode}")
 
     }
 }

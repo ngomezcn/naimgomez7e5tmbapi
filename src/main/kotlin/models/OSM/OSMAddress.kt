@@ -1,4 +1,4 @@
-package models
+package models.OSM
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
