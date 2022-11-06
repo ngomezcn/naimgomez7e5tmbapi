@@ -13,7 +13,7 @@ class TMBRepository(private val httpClient: HttpClient) {
     private val appId = "25555beb"
     private val appKey = "95aa927e0682dc28a7cd3c306f6cc5e8"
     private val baseEndPoint = "https://api.tmb.cat/v1/planner/plan?app_id=$appId&app_key=$appKey"
-    private val query = mutableListOf<String>(baseEndPoint)
+    val query = mutableListOf<String>(baseEndPoint)
 
     fun setRoute(fromPlace: Coordinates, toPlace: Coordinates) {
         query.add("&fromPlace=$fromPlace&toPlace=$toPlace")

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="repositories.TMBRepositoryTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2022-11-06T23:34:10" hostname="DESKTOP-0JH57IF" time="0.02">
+  <properties/>
+  <testcase name="addUsingTransit()" classname="repositories.TMBRepositoryTest" time="0.015"/>
+  <testcase name="setMaxWalkDistance()" classname="repositories.TMBRepositoryTest" time="0.0"/>
+  <testcase name="setRoute()" classname="repositories.TMBRepositoryTest" time="0.002"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
