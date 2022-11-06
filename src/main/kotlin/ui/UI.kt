@@ -40,7 +40,6 @@ class UI {
 
 
         val routes = blRoutePlanner.getRoutes()
-
         if(routes!!.plan!!.itineraries.size == 0) {
             println("No se ha podido calcular una ruta con los parámetros indicados")
             return
@@ -50,6 +49,7 @@ class UI {
 
     suspend fun displayRoute(selected: Itineraries, departurePlace : OSMPlace, destinationPlace: OSMPlace) {
         println("\n=== Mostrando ruta ====")
+        blRoutePlanner.saveRoute(selected)
 
         for (leg in selected.legs) {
 
